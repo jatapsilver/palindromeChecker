@@ -1,103 +1,224 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+
+function cleanString(str: string) {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^0-9a-zA-Z]/g, "")
+    .toLowerCase();
+}
+
+function isPalindrome(str: string) {
+  const cleaned = cleanString(str);
+  const reversed = cleaned.split("").reverse().join("");
+  return cleaned === reversed;
+}
+
+const codeHtml = `<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <title>Palindrome Checker</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <h1>APP PALINDROME</h1>
+    <input type="text" id="text-input" placeholder="Ingrese el texto">
+
+    <button id="check-btn">Enviar</button>
+    <div id="result"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
+`;
+
+const codeCss = `
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+}
+
+h1 {
+  margin-bottom: 40px;
+  font-size: 2.5em;
+  color: #007BFF;
+}
+
+#text-input {
+  padding: 10px;
+  font-size: 16px;
+  width: 300px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+#text-input:focus {
+  border-color: #007BFF;
+  outline: none;
+}
+
+#check-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007BFF;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#check-btn:hover {
+  background-color: #0056b3;
+}
+
+#result {
+  margin-top: 20px;
+  font-size: 18px;
+  text-align: center;
+}
+`;
+
+const codeJs = `
+function cleanString(str) {
+  return str.replace(/[^0-9a-zA-Z]/g, "").toLowerCase();
+}
+
+function isPalindrome(str) {
+  const cleaned = cleanString(str);
+  const reversed = cleaned.split("").reverse().join("");
+  return cleaned === reversed;
+}
+
+document.getElementById("check-btn").addEventListener("click", function() {
+  const inputElem = document.getElementById("text-input");
+  const resultElem = document.getElementById("result");
+  const text = inputElem.value;
+
+  if (text.trim() === "") {
+    alert("Please input a value");
+    return;
+  }
+
+  if (isPalindrome(text)) {
+    resultElem.textContent = text + " is a palindrome";
+  } else {
+    resultElem.textContent = text + " is not a palindrome";
+  }
+});
+`;
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [text, setText] = useState("");
+  const [result, setResult] = useState("");
+  const [htmlCode] = useState(codeHtml);
+  const [cssCode] = useState(codeCss);
+  const [jsCode] = useState(codeJs);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+  const checkPalindrome = () => {
+    if (text.trim() === "") {
+      setResult("Por favor, ingrese un valor");
+      return;
+    }
+    setResult(
+      isPalindrome(text)
+        ? `${text}, es una palabra palíndroma`
+        : `${text}, no es una palabra palíndroma`
+    );
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-900 text-white p-6">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-3xl font-bold text-blue-400 text-center">
+          App proceso de selección Ethereum Developer Pack
+        </h1>
+        <h2 className="mt-2 text-2xl text-gray-300 text-center">
+          By Javier Plata
+        </h2>
+        <p className="mt-2 text-gray-300 text-center">
+          Aquí encontrarás una demostracion del desafío técnico de freeCodeCamp
+          para la selección del Ethereum Developer Pack.
+        </p>
+
+        <Card className="mt-6 bg-gray-800 border border-gray-700">
+          <CardContent className="p-6 flex flex-col items-center">
+            <h1 className="text-xl font-semibold text-green-400 text-center">
+              App Palindrome Checker
+            </h1>
+            <p className="mt-2 text-gray-300 mb-2">
+              Verifica si una palabra o frase es un palíndromo.
+            </p>
+            <Input
+              className="text-white text-center"
+              type="text"
+              placeholder="Ingrese un texto"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+            <Button
+              className="mt-4 bg-blue-500 hover:bg-blue-700"
+              onClick={checkPalindrome}
+            >
+              Verificar
+            </Button>
+            {result && <p className="mt-4 text-lg text-white">{result}</p>}
+          </CardContent>
+        </Card>
+
+        <Card className="mt-6 bg-gray-800 border border-gray-700">
+          <CardContent className="p-4">
+            <h2 className="text-xl font-semibold text-green-400 text-center">
+              Código utilizado en freeCodeCamp
+            </h2>
+            <h3 className="mt-2 text-xl font-semibold text-red-400">HTML</h3>
+            <SyntaxHighlighter
+              language="html"
+              style={dracula}
+              className="rounded-lg mt-2"
+            >
+              {htmlCode}
+            </SyntaxHighlighter>
+            <h3 className="mt-2 text-xl font-semibold text-blue-400">CSS</h3>
+            <SyntaxHighlighter
+              language="css"
+              style={dracula}
+              className="rounded-lg mt-2"
+            >
+              {cssCode}
+            </SyntaxHighlighter>
+            <h3 className="mt-2 text-xl font-semibold text-yellow-400">
+              JavaScript
+            </h3>
+            <SyntaxHighlighter
+              language="javascript"
+              style={dracula}
+              className="rounded-lg mt-2"
+            >
+              {jsCode}
+            </SyntaxHighlighter>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }
